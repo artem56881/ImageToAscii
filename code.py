@@ -1,3 +1,5 @@
+from io import StringIO
+
 import PIL.Image
 import random
 
@@ -43,20 +45,22 @@ def color_to_alphabet(color, alphabet, max_color=255):
     index = shrink_values(color[0], max_color, len(alphabet)-1)
     return alphabet[index]
 
+def ascii_art(png_image: PIL.Image,  scale=2, alphabet="▁▂▃▄▅▆▇█"):
+    imgX = png_image.size[0]
+    imgY = png_image.size[1]
+    for y in range(0, imgY - 3, 3 * scale):
+        for x in range(0, imgX - 2, 2 * scale - 2):
+            colors = [png_image.getpixel((x, y)), png_image.getpixel((x + 1, y)), png_image.getpixel((x, y + 1)),
+                      png_image.getpixel((x + 1, y + 1)), png_image.getpixel((x, y + 2)), png_image.getpixel((x + 1, y + 2))]
+            new_avg_color = avg_color(colors)
+            print(color_to_alphabet(new_avg_color, alphabet), end='')
+        print()
 
-braille_alphabet = "▁▂▃▄▅▆▇█"
-# braille_alphabet = "⠈⠐⠠⠉⠑⠡⠃⠅⠉⠊⠒⠢⠌⠔⠤⠇⠕⠥⠆⠎⠖⠦⠧⠏⠍⠇⠗⠨⠙⠪⠬⠭⠛⠝⠮⠟⠛⠜⠝⠯⠳⠴⠶⠷⠸⠹⠺⠻⠼⠽⠾⠿"
+# braille_alphabet = "▁▂▃▄▅▆▇█"
+braille_alphabet = "⠈⠐⠠⠉⠑⠡⠃⠅⠉⠊⠒⠢⠌⠔⠤⠇⠕⠥⠆⠎⠖⠦⠧⠏⠍⠇⠗⠨⠙⠪⠬⠭⠛⠝⠮⠟⠛⠜⠝⠯⠳⠴⠶⠷⠸⠹⠺⠻⠼⠽⠾⠿"
 # braille_alphabet = " .,aA"
 
-img = PIL.Image.open("C:/Users/artem/Documents/pythonproj/bwBrileChar/image.png")
+img = PIL.Image.open("./image.png")
 
-down_scale_factor = 3
 
-imgX = img.size[0]
-imgY = img.size[1]
-for y in range(0, imgY-3, 3*down_scale_factor):
-    for x in range(0, imgX-2, 2*down_scale_factor-2):
-        colors = [img.getpixel((x,y)), img.getpixel((x+1,y)), img.getpixel((x,y+1)), img.getpixel((x+1,y+1)), img.getpixel((x,y+2)), img.getpixel((x+1,y+2))]
-        new_avg_color = avg_color(colors)
-        print(color_to_alphabet(new_avg_color, braille_alphabet), end='')
-    print()
+ascii_art(img, alphabet=braille_alphabet, scale=4)
