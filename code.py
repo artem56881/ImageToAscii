@@ -45,22 +45,20 @@ def color_to_alphabet(color, alphabet, max_color=255):
     index = shrink_values(color[0], max_color, len(alphabet)-1)
     return alphabet[index]
 
-def ascii_art(png_image: PIL.Image,  scale=2, alphabet="▁▂▃▄▅▆▇█"):
+def ascii_art(png_image: PIL.Image,  scale=2, alphabet=" ▁▂▃▄▅▆▇█"):
     imgX = png_image.size[0]
     imgY = png_image.size[1]
-    for y in range(0, imgY - 3, 3 * scale):
-        for x in range(0, imgX - 2, 2 * scale - 2):
-            colors = [png_image.getpixel((x, y)), png_image.getpixel((x + 1, y)), png_image.getpixel((x, y + 1)),
-                      png_image.getpixel((x + 1, y + 1)), png_image.getpixel((x, y + 2)), png_image.getpixel((x + 1, y + 2))]
+    for y in range(0, imgY, 2 * scale):
+        for x in range(0, imgX, 1 * scale):
+            colors = [png_image.getpixel((x, y))]
             new_avg_color = avg_color(colors)
             print(color_to_alphabet(new_avg_color, alphabet), end='')
         print()
 
-# braille_alphabet = "▁▂▃▄▅▆▇█"
-braille_alphabet = "⠈⠐⠠⠉⠑⠡⠃⠅⠉⠊⠒⠢⠌⠔⠤⠇⠕⠥⠆⠎⠖⠦⠧⠏⠍⠇⠗⠨⠙⠪⠬⠭⠛⠝⠮⠟⠛⠜⠝⠯⠳⠴⠶⠷⠸⠹⠺⠻⠼⠽⠾⠿"
-# braille_alphabet = " .,aA"
+# braille_alphabet = " ▁▂▃▄▅▆▇█"
+braille_alphabet = " -|\\"
+# braille_alphabet = "█▇▆▅▄▃▂▁ "
 
 img = PIL.Image.open("./image.png")
 
-
-ascii_art(img, alphabet=braille_alphabet, scale=4)
+ascii_art(img, alphabet=braille_alphabet, scale=2)
